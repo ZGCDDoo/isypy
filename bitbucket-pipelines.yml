@@ -1,0 +1,18 @@
+# This is a sample build configuration for all languages.
+# Check our guides at https://confluence.atlassian.com/x/5Q4SMw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+# image: docker-image:tag
+
+image: python:3.6
+pipelines:
+  default:
+    - step:
+        script:
+          - pip install scipy
+          - pip install
+          - pip install codecov
+          - python -m unittest discover
+          - coverage run tests.py
+          - codecov
