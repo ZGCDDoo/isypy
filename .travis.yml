@@ -8,6 +8,7 @@ python:
 install:
   - pip install codecov
   - pip install scipy
+  - pip install mpi4py
   - pip install coverage
 
 script:

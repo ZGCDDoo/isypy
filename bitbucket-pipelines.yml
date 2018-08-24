@@ -12,6 +12,7 @@ pipelines:
         script:
           - pip install scipy
           - pip install
+          - pip install mpi4py
           - pip install codecov
           - python -m unittest discover
           - coverage run tests.py

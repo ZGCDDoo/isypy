@@ -1,3 +1,9 @@
+.. image:: https://travis-ci.org/ZGCDDoo/isypy.svg?branch=master
+   :alt: Build status of isypy on Travis CI
+   :target: https://travis-ci.org/ZGDDoo/isypy
+   
+.. image:: https://codecov.io/gh/ZGCDDoo/isypy/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/ZGCDDoo/isypy
 
 Isypy
 =======
