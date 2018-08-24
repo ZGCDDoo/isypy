@@ -64,7 +64,8 @@ class MonteCarlo(object):
         while timer.time_over():
             self.MarkovChain.do_step()
             nsteps += 1
-            if nsteps % upd_measure == 0:
+            # print("nsteps = ", nsteps)
+            if (nsteps % upd_measure) == 0:
                 self.MarkovChain.measure()
 
         print("End Measurements")

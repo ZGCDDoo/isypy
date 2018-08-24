@@ -12,6 +12,7 @@ class Timer(object):
         """ """
         self.start = time.perf_counter()
         self.countdown = 0.0
+        self.reset()
         return None
 
     def reset(self)->None:
