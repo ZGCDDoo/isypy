@@ -45,7 +45,7 @@ class TestStatsObs(unittest.TestCase):
             jj_params = json.load(fin)
         ising_c = ising.Ising(jj_params)
 
-        for i in range(1000000):
+        for i in range(1000):
             ising_c.do_step()
 
         print("Energy = ", ising_c.current["Energy"])

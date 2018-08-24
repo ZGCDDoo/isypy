@@ -66,10 +66,15 @@ class Ising(object):
                     nyp1 = ny + 1 if ny != (shape_ss[1] - 1) else 0
                     nzp1 = nz + 1 if nz != (shape_ss[2] - 1) else 0
 
-                    energy += self.Jparams["Jx"] * self.spins[nx, ny, nz] * self.spins[nxp1, ny, nz] +\
-                        self.Jparams["Jy"] * self.spins[nx, ny, nz] * self.spins[nx, nyp1, nz] + \
-                        self.Jparams["Jz"] * self.spins[nx,
-                                                        ny, nz] * self.spins[nx, ny, nzp1]
+                    if shape_ss[0] != 1:
+                        energy += self.Jparams["Jx"] * self.spins[nx,
+                                                                  ny, nz] * self.spins[nxp1, ny, nz]
+                    if shape_ss[1] != 1:
+                        energy += self.Jparams["Jy"] * self.spins[nx,
+                                                                  ny, nz] * self.spins[nx, nyp1, nz]
+                    if shape_ss[1] != 1:
+                        energy += self.Jparams["Jz"] * self.spins[nx,
+                                                                  ny, nz] * self.spins[nx, ny, nzp1]
 
         energy -= self.h_field * self.magnetization()
         self.current["Energy"] = energy
@@ -102,11 +107,23 @@ class Ising(object):
         nxp1 = nx + 1 if nx != (Nx - 1) else 0
         nyp1 = ny + 1 if ny != (Ny - 1) else 0
         nzp1 = nz + 1 if nz != (Nz - 1) else 0
+        nxm1 = nx - 1 if nx != 0 else (Nx - 1)
+        nym1 = ny - 1 if ny != 0 else (Ny - 1)
+        nzm1 = nz - 1 if nz != 0 else (Nz - 1)
 
-        delta_energy += self.Jparams["Jx"] * self.spins[nx, ny, nz] * self.spins[nxp1, ny, nz] +\
-            self.Jparams["Jy"] * self.spins[nx, ny, nz] * self.spins[nx, nyp1, nz] + \
-            self.Jparams["Jz"] * self.spins[nx,
-                                            ny, nz] * self.spins[nx, ny, nzp1] - self.h_field * self.current["Spin_Flip"]["SpinValue"]
+        # Energy in x
+        if Nx != 1:
+            delta_energy += self.Jparams["Jx"] * self.spins[nx, ny, nz] * \
+                (self.spins[nxm1, ny, nz] + self.spins[nxp1, ny, nz])
+
+        if Ny != 1:
+            delta_energy += self.Jparams["Jy"] * self.spins[nx, ny, nz] * \
+                (self.spins[nx, nym1, nz] + self.spins[nx, nyp1, nz])
+        if Nz != 1:
+            delta_energy += self.Jparams["Jz"] * self.spins[nx, ny, nz] * \
+                (self.spins[nx, ny, nzm1] + self.spins[nx, ny, nzp1])
+
+        delta_energy -= self.h_field * self.current["Spin_Flip"]["SpinValue"]
 
         self.current["DeltaEnergy"] = delta_energy
         self.current["Spin_Flip"]["Weight"] = np.exp(-self.beta * delta_energy)
