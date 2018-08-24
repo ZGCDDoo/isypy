@@ -11,8 +11,8 @@ import json
 
 
 import numpy as np
-from numpy import random.randomint as randint
-from numpy import random.random as urng
+from numpy.random import randint
+from numpy.random import random as urng
 
 # H = sum_{ij} J_{ij} S_i S_j + h Sum_{i}S_i
 
@@ -120,7 +120,8 @@ class Ising(object):
         """ """
         self.current["Energy"] += self.current["Delta_Energy"]
         self.current["Magnetization"] = self.magnetization()
-        self.spins[*self.current["Spin_Flip"]["Indices"]] = self.current["Spin_Flip"]["SpinValue"]
+        self.spins[self.current["Spin_Flip"]["Indices"]
+                   ] = self.current["Spin_Flip"]["SpinValue"]
         return None
 
     def measure(self)->None:
@@ -133,6 +134,9 @@ class Ising(object):
 
     def save(self)->None:
         """Save the state"""
+        for key in self.obs.keys():
+            if key != "NMeas":
+                self.obs[key] /= self.obs["NMeas"]
 
         file_out: str = "ising.out"
         with open(file_out, mode="a") as fout:

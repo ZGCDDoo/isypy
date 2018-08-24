@@ -31,19 +31,42 @@ class MonteCarlo(object):
 
     def run_simulation(self)->None:
         """ """
+        print("Start of Run Simulation")
+        self.thermalize()
+        self.measure()
+        self.MarkovChain.save()
+        print("End of Run Simulation")
         return None
 
     def thermalize(self) ->None:
         """ """
+        print("Start Thermalization")
 
         timer = timerpy.Timer()
-        timer.start_countdown(60)
+        timer.start_countdown(60.0 * self.jj_params["ThermalizationTime"])
 
         while timer.time_over():
             self.MarkovChain.do_step()
 
+        print("End Thermalization")
+
         return None
 
-    def measure()->None:
+    def measure(self)->None:
+        """ """
+        print("Start Measurements")
+
+        timer = timerpy.Timer()
+        timer.start_countdown(60.0 * self.jj_params["MeasurementTime"])
+
+        nsteps = 0
+        upd_measure = self.jj_params["UpdatesMeasurements"]
+        while timer.time_over():
+            self.MarkovChain.do_step()
+            nsteps += 1
+            if nsteps % upd_measure == 0:
+                self.MarkovChain.measure()
+
+        print("End Measurements")
 
         return None

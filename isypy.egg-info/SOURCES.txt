@@ -1,9 +1,10 @@
 README.rst
 isypy/__init__.py
 isypy/__main__.py
+isypy/ising.py
 isypy/isypy.py
 isypy/monte_carlo.py
-isypy/timer.py
+isypy/timerpy.py
 isypy.egg-info/PKG-INFO
 isypy.egg-info/SOURCES.txt
 isypy.egg-info/dependency_links.txt

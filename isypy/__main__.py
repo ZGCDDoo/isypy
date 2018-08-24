@@ -3,12 +3,12 @@ import argparse
 
 
 parser = argparse.ArgumentParser(description='Solve the 2D Ising Model.')
-parser.add_argument('temperature',  type=float,
-                    help='temperature in units of J')
+parser.add_argument('json_file',  type=str,
+                    help='name of the params file in json format')
 
-parser.add_argument('Lx', type=int,
-                    help='linear length')
 
 args = parser.parse_args()
+with open(args.json_file, "r") as fin:
+    jj_params = json.load(fin)
 
-isypy.run_isypy(args.temperature, args.Lx)
+isypy.run_isypy(jj_params)

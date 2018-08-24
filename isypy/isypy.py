@@ -11,12 +11,12 @@ import json
 
 
 from . import monte_carlo
+from . import ising
 
 
-def run_isypy(temperature: float, Lx: int) -> None:
-    print("Running isypy !")
-    print("(Temperature, Lx) = ({0}, {1})".format(temperature, Lx))
+def run_isypy(jj_params) -> None:
+    print("Start Running isypy !")
 
-    mc_machine = monte_carlo.MonteCarlo(0)
-    mc_machine.thermalize()
+    mc_machine = monte_carlo.MonteCarlo(jj_params, ising.Ising)
+    mc_machine.run_simulation()
     return None
