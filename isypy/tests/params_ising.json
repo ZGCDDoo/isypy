@@ -1,13 +1,13 @@
 {
-    "ThermalizationTime": 0.50,
+    "ThermalizationTime": 1.0,
     "MeasurementTime": 1.10,
     "UpdatesMeasurement": 20,
     "LatticeSize": [
-        32,
-        32,
+        10,
+        10,
         1
     ],
-    "Beta": 10.01,
+    "Beta": 0.4,
     "Seed": 103234,
     "HField": 0.0,
     "JParameters": {

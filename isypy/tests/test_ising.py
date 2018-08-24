@@ -5,7 +5,7 @@ import numpy as np
 import unittest
 import json
 
-from .. import ising
+from .. import ising_vers2 as ising
 
 
 class TestStatsObs(unittest.TestCase):
