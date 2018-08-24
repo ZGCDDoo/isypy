@@ -135,6 +135,7 @@ class Ising(object):
 
     def accept_flip(self)->None:
         """ """
+        # print("Flip Accepted !")
         self.current["Energy"] += self.current["DeltaEnergy"]
         self.current["Magnetization"] = self.magnetization()
         self.spins[self.current["Spin_Flip"]["Indices"]
@@ -158,7 +159,7 @@ class Ising(object):
     def save(self)->None:
         """Save the state"""
         for key in self.obs.keys():
-            if key != "NMeas":
+            if key != "NMeas" or key != "AcceptedFlips":
                 self.obs[key] /= self.obs["NMeas"]
 
         file_out: str = "ising.out"
