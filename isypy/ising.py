@@ -30,7 +30,7 @@ class Ising(object):
         """ """
         # 0.) Get the parameter values
         (Nx, Ny, Nz) = jj_params["LatticeSize"]
-        self.beta = jj_params["Beta"]
+        self.beta = float(jj_params["Beta"])
         np.random.seed(jj_params["Seed"])
 
         # 1.) Randomly initialize the spins
@@ -89,7 +89,7 @@ class Ising(object):
 
     def try_single_spin_flip(self)->None:
         """ """
-        current_energy = self.current["Energy"]
+
         (Nx, Ny, Nz) = self.spins.shape
         self.current["Spin_Flip"]["Indices"] = (
             randint(0, Nx), randint(0, Ny), randint(0, Nz))
