@@ -41,7 +41,7 @@ class Ising(object):
         self.h_field = jj_params["HField"]
         self.Jparams = jj_params["JParameters"]
         self.obs = {"Energy": 0.0, "Magnetization": 0.0,
-                    "Specific_Heat": 0.0, "Magnetic_susceptibility": 0.0, "NMeas": 0}
+                    "Specific_Heat": 0.0, "Magnetic_susceptibility": 0.0, "NMeas": 0, "AcceptedFlips": 0}
 
         # When we try a spin flip, it is not immediatly accepted,thus, cache the values
         # and accept only in the method accept_move
@@ -139,6 +139,8 @@ class Ising(object):
         self.current["Magnetization"] = self.magnetization()
         self.spins[self.current["Spin_Flip"]["Indices"]
                    ] = self.current["Spin_Flip"]["SpinValue"]
+
+        self.obs["AcceptedFlips"] += 1
         return None
 
     def measure(self)->None:
