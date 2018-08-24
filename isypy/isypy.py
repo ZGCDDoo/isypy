@@ -11,7 +11,7 @@ import json
 
 
 from . import monte_carlo
-from . import ising_vers2 as ising
+from . import ising
 
 
 def run_isypy(jj_params) -> None:

@@ -30,6 +30,7 @@ class Ising(object):
         """ """
         # 0.) Get the parameter values
         (Nx, Ny, Nz) = jj_params["LatticeSize"]
+
         self.beta = float(jj_params["Beta"])
         np.random.seed(jj_params["Seed"])
 
@@ -40,8 +41,9 @@ class Ising(object):
         # 2.) Calculate the energy and initialize the J matrix
         self.h_field = jj_params["HField"]
         self.Jparams = jj_params["JParameters"]
+        self.upd = {"Proposed": 0, "Accepted": 0}
         self.obs = {"Energy": 0.0, "Magnetization": 0.0,
-                    "Specific_Heat": 0.0, "Magnetic_susceptibility": 0.0, "NMeas": 0, "AcceptedFlips": 0}
+                    "Specific_Heat": 0.0, "Magnetic_susceptibility": 0.0, "NMeas": 0}
 
         # When we try a spin flip, it is not immediatly accepted,thus, cache the values
         # and accept only in the method accept_move
@@ -57,28 +59,42 @@ class Ising(object):
         shape_ss = self.spins.shape
         assert len(shape_ss) == 3
         energy: float = 0.0
+        (nxparr, nxmarr) = self.build_arr_perdiodic(shape_ss[0])
+        (nyparr, nymarr) = self.build_arr_perdiodic(shape_ss[1])
+        (nzparr, nzmarr) = self.build_arr_perdiodic(shape_ss[2])
 
-        for nx in range(shape_ss[0]):
-            for ny in range(shape_ss[1]):
-                for nz in range(shape_ss[2]):
+        for ii in range(shape_ss[0]):
+            for jj in range(shape_ss[1]):
+                for kk in range(shape_ss[2]):
                     # periodic boundary conditions
-                    nxp1 = nx + 1 if nx != (shape_ss[0] - 1) else 0
-                    nyp1 = ny + 1 if ny != (shape_ss[1] - 1) else 0
-                    nzp1 = nz + 1 if nz != (shape_ss[2] - 1) else 0
-
                     if shape_ss[0] != 1:
-                        energy += self.Jparams["Jx"] * self.spins[nx,
-                                                                  ny, nz] * self.spins[nxp1, ny, nz]
+                        energy += self.Jparams["Jx"] * self.spins[ii, jj, kk] * \
+                            (self.spins[nxparr[ii], jj, kk] +
+                             self.spins[nxmarr[ii], jj, kk])
                     if shape_ss[1] != 1:
-                        energy += self.Jparams["Jy"] * self.spins[nx,
-                                                                  ny, nz] * self.spins[nx, nyp1, nz]
+                        energy += self.Jparams["Jy"] * self.spins[ii, jj, kk] * \
+                            (self.spins[ii, nyparr[jj], kk] +
+                             self.spins[ii, nymarr[jj], kk])
                     if shape_ss[1] != 1:
-                        energy += self.Jparams["Jz"] * self.spins[nx,
-                                                                  ny, nz] * self.spins[nx, ny, nzp1]
+                        energy += self.Jparams["Jz"] * self.spins[ii, jj, kk] * \
+                            (self.spins[ii, jj, nzparr[kk]] +
+                             self.spins[ii, jj, nzmarr[kk]])
 
+        energy /= 2.0
         energy -= self.h_field * self.magnetization()
         self.current["Energy"] = energy
+        # print("Init energy = ", energy)
+        # print(self.spins)
         return None
+
+    def build_arr_perdiodic(self, NN: int):
+        """ """
+        nparr = np.arange(1, NN + 1)
+        nparr[-1] = 0
+        nmarr = np.arange(-1, NN - 1)
+        nmarr[0] = NN - 1
+
+        return (nparr, nmarr)
 
     def magnetization(self) ->float:
         """ """
@@ -89,6 +105,7 @@ class Ising(object):
            In a next version do multiple spin flips
          """
         self.try_single_spin_flip()
+        self.upd["Proposed"] += 1
         return None
 
     def try_single_spin_flip(self)->None:
@@ -101,29 +118,31 @@ class Ising(object):
         (nx, ny, nz) = self.current["Spin_Flip"]["Indices"]
         self.current["Spin_Flip"]["SpinValue"] = -self.spins[nx, ny, nz]
 
-        delta_energy = -self.current["Energy"]
-
         # periodic boundary conditions
-        nxp1 = nx + 1 if nx != (Nx - 1) else 0
-        nyp1 = ny + 1 if ny != (Ny - 1) else 0
-        nzp1 = nz + 1 if nz != (Nz - 1) else 0
-        nxm1 = nx - 1 if nx != 0 else (Nx - 1)
-        nym1 = ny - 1 if ny != 0 else (Ny - 1)
-        nzm1 = nz - 1 if nz != 0 else (Nz - 1)
+        (nxp1, nxm1) = (nx + 1 if nx != (Nx - 1) else 0,
+                        nx - 1 if nx != 0 else (Nx - 1))
 
+        (nyp1, nym1) = (ny + 1 if ny != (Ny - 1) else 0,
+                        ny - 1 if ny != 0 else (Ny - 1))
+
+        (nzp1, nzm1) = (nz + 1 if nz != (Nz - 1) else 0,
+                        nz - 1 if nz != 0 else (Nz - 1))
+
+        delta_energy = 0.0
+        deltaspin = -2.0 * self.spins[nx, ny, nz]
         # Energy in x
         if Nx != 1:
-            delta_energy += self.Jparams["Jx"] * self.spins[nx, ny, nz] * \
+            delta_energy += self.Jparams["Jx"] * deltaspin * \
                 (self.spins[nxm1, ny, nz] + self.spins[nxp1, ny, nz])
 
         if Ny != 1:
-            delta_energy += self.Jparams["Jy"] * self.spins[nx, ny, nz] * \
+            delta_energy += self.Jparams["Jy"] * deltaspin * \
                 (self.spins[nx, nym1, nz] + self.spins[nx, nyp1, nz])
         if Nz != 1:
-            delta_energy += self.Jparams["Jz"] * self.spins[nx, ny, nz] * \
+            delta_energy += self.Jparams["Jz"] * deltaspin * \
                 (self.spins[nx, ny, nzm1] + self.spins[nx, ny, nzp1])
 
-        delta_energy -= self.h_field * self.current["Spin_Flip"]["SpinValue"]
+        delta_energy -= self.h_field * deltaspin
 
         self.current["DeltaEnergy"] = delta_energy
         self.current["Spin_Flip"]["Weight"] = np.exp(-self.beta * delta_energy)
@@ -141,7 +160,7 @@ class Ising(object):
         self.spins[self.current["Spin_Flip"]["Indices"]
                    ] = self.current["Spin_Flip"]["SpinValue"]
 
-        self.obs["AcceptedFlips"] += 1
+        self.upd["Accepted"] += 1
         return None
 
     def measure(self)->None:
@@ -159,11 +178,12 @@ class Ising(object):
     def save(self)->None:
         """Save the state"""
         for key in self.obs.keys():
-            if key != "NMeas" or key != "AcceptedFlips":
-                self.obs[key] /= self.obs["NMeas"]
+            if key != "NMeas":
+                self.obs[key] /= float(self.obs["NMeas"] * self.spins.size)
 
         file_out: str = "ising.out"
         with open(file_out, mode="a") as fout:
             json.dump(self.obs, fout, indent=4)
 
         np.savetxt("config.dat", self.spins)
+        print(self.upd)
