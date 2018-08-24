@@ -143,14 +143,14 @@ class Ising(object):
 
     def measure(self)->None:
         """ """
-        print("Start Ising Measuring !")
+        # print("Start Ising Measuring !")
 
         self.current["Magnetization"] = self.magnetization()
         self.obs["Magnetization"] += self.current["Magnetization"]
         self.obs["Energy"] += self.current["Energy"]
         self.obs["NMeas"] += 1
 
-        print("End Ising Measuring !")
+        # print("End Ising Measuring !")
         return None
 
     def save(self)->None:
