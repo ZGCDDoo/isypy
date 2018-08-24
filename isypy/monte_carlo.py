@@ -4,9 +4,6 @@ Created on Tue Jan 26 10:03:34 2016
 
 @author: Charles-David Hebert
 """
-
-import numpy as np
-import scipy
 from . import timerpy
 
 
@@ -15,10 +12,10 @@ class MonteCarlo(object):
     """A Monte Carlo simulation runner
        """
 
-    def __init__(self, yy, MarkovChainType: int=0) ->None:
+    def __init__(self, jj_params, MarkovChainType) ->None:
         """ Inits a Monte Carlo class.
         Args:
-            yy: A yaml object containing the Monte Carlo configuration for the Simulation.
+            jj_params: A json object containing the Monte Carlo configuration for the Simulation.
 
         Returns:
             None
@@ -26,8 +23,14 @@ class MonteCarlo(object):
         Raises:
             IOError:
         """
-        self.yy = yy
+        self.jj_params = jj_params
+        self.MarkovChain = MarkovChainType(jj_params)
+
         print("Monte Carlo Class created !")
+        return None
+
+    def run_simulation(self)->None:
+        """ """
         return None
 
     def thermalize(self) ->None:
@@ -37,6 +40,10 @@ class MonteCarlo(object):
         timer.start_countdown(60)
 
         while timer.time_over():
-            i = 0
+            self.MarkovChain.do_step()
+
+        return None
+
+    def measure()->None:
 
         return None

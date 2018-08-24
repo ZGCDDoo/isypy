@@ -41,13 +41,13 @@ class Ising(object):
         self.h_field = jj_params["HField"]
         self.Jparams = jj_params["JParameters"]
         self.obs = {"Energy": 0.0, "Magnetization": 0.0,
-                    "Specific_Heat": 0.0, "Magnetic_susceptibility": 0.0}
+                    "Specific_Heat": 0.0, "Magnetic_susceptibility": 0.0, "NMeas": 0}
 
         # When we try a spin flip, it is not immediatly accepted,thus, cache the values
         # and accept only in the method accept_move
         # DeltaEnergy = E' - E, with E' the energy of the system with the spin flipped
         self.current = {"Spin_Flip": {"Indices": (self.invalid, self.invalid, self.invalid), "DeltaEnergy": self.invalidf, "SpinValue": self.invalid, "Weight": self.invalid},
-                        "Energy": self.invalidf, "Magnetization": self.invalidf, "Specific_Heat": self.invalidf, "Magnetic_Susceptibility": self.invalidf}
+                        "Energy": self.invalidf}
 
         self.current["Magnetization"] = self.magnetization()
         self.init_energy()
@@ -107,7 +107,7 @@ class Ising(object):
         delta_energy += self.Jparams["Jx"] * self.spins[nx, ny, nz] * self.spins[nxp1, ny, nz] +\
             self.Jparams["Jy"] * self.spins[nx, ny, nz] * self.spins[nx, nyp1, nz] + \
             self.Jparams["Jz"] * self.spins[nx,
-                                            ny, nz] * self.spins[nx, ny, nzp1]
+                                            ny, nz] * self.spins[nx, ny, nzp1] - self.h_field * self.current["Spin_Flip"]["SpinValue"]
 
         self.current["Spin_Flip"]["Weight"] = np.exp(-self.beta * delta_energy)
 
@@ -116,15 +116,24 @@ class Ising(object):
 
         return None
 
-    def accept_flip(self)->float:
+    def accept_flip(self)->None:
         """ """
         self.current["Energy"] += self.current["Delta_Energy"]
+        self.current["Magnetization"] = self.magnetization()
         self.spins[*self.current["Spin_Flip"]["Indices"]] = self.current["Spin_Flip"]["SpinValue"]
-        return 0.0
+        return None
 
     def measure(self)->None:
         """ """
         self.current["Magnetization"] = self.magnetization()
         self.obs["Magnetization"] += self.current["Magnetization"]
-
+        self.obs["Energy"] += self.current["Energy"]
+        self.obs["NMeas"] += 1
         return None
+
+    def save(self)->None:
+        """Save the state"""
+
+        file_out: str = "ising.out"
+        with open(file_out, mode="a") as fout:
+            json.dump(self.obs, fout, indent=4)
