@@ -59,9 +59,9 @@ class Ising(object):
         assert len(shape_ss) == 3
         energy: float = 0.0
 
-        for nx in shape_ss[0]:
-            for ny in shape_ss[1]:
-                for nz in shape_ss[2]:
+        for nx in range(shape_ss[0]):
+            for ny in range(shape_ss[1]):
+                for nz in range(shape_ss[2]):
                     # periodic boundary conditions
                     nxp1 = nx + 1 if nx != (shape_ss[0] - 1) else 0
                     nyp1 = ny + 1 if ny != (shape_ss[1] - 1) else 0
@@ -95,7 +95,7 @@ class Ising(object):
             randint(0, Nx), randint(0, Ny), randint(0, Nz))
 
         (nx, ny, nz) = self.current["Spin_Flip"]["Indices"]
-        self.current["Spin_Flip"]["Value"] = -spins[nx, ny, nz]
+        self.current["Spin_Flip"]["Value"] = -self.spins[nx, ny, nz]
 
         delta_energy = -self.current["Energy"]
 
@@ -109,6 +109,7 @@ class Ising(object):
             self.Jparams["Jz"] * self.spins[nx,
                                             ny, nz] * self.spins[nx, ny, nzp1] - self.h_field * self.current["Spin_Flip"]["SpinValue"]
 
+        self.current["DeltaEnergy"] = delta_energy
         self.current["Spin_Flip"]["Weight"] = np.exp(-self.beta * delta_energy)
 
         if urng() < self.current["Spin_Flip"]["Weight"]:
@@ -118,7 +119,7 @@ class Ising(object):
 
     def accept_flip(self)->None:
         """ """
-        self.current["Energy"] += self.current["Delta_Energy"]
+        self.current["Energy"] += self.current["DeltaEnergy"]
         self.current["Magnetization"] = self.magnetization()
         self.spins[self.current["Spin_Flip"]["Indices"]
                    ] = self.current["Spin_Flip"]["SpinValue"]
@@ -126,10 +127,14 @@ class Ising(object):
 
     def measure(self)->None:
         """ """
+        print("Start Ising Measuring !")
+
         self.current["Magnetization"] = self.magnetization()
         self.obs["Magnetization"] += self.current["Magnetization"]
         self.obs["Energy"] += self.current["Energy"]
         self.obs["NMeas"] += 1
+
+        print("End Ising Measuring !")
         return None
 
     def save(self)->None:

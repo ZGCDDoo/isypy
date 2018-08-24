@@ -60,7 +60,7 @@ class MonteCarlo(object):
         timer.start_countdown(60.0 * self.jj_params["MeasurementTime"])
 
         nsteps = 0
-        upd_measure = self.jj_params["UpdatesMeasurements"]
+        upd_measure = self.jj_params["UpdatesMeasurement"]
         while timer.time_over():
             self.MarkovChain.do_step()
             nsteps += 1

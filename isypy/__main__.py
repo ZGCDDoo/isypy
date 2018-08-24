@@ -1,5 +1,6 @@
 from isypy import isypy
 import argparse
+import json
 
 
 parser = argparse.ArgumentParser(description='Solve the 2D Ising Model.')
