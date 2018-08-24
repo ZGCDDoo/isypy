@@ -8,7 +8,7 @@ import json
 from .. import ising
 
 
-class TestStatsObs(unittest.TestCase):
+class TestIsing(unittest.TestCase):
     """ """
 
     params_file: str = "isypy/tests/params_ising_test.json"
