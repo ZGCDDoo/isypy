@@ -83,8 +83,8 @@ class Ising(object):
         energy /= 2.0
         energy -= self.h_field * self.magnetization()
         self.current["Energy"] = energy
-        print("Init energy = ", energy)
-        print(self.spins)
+        # print("Init energy = ", energy)
+        # print(self.spins)
         return None
 
     def build_arr_perdiodic(self, NN: int):
@@ -179,7 +179,7 @@ class Ising(object):
         """Save the state"""
         for key in self.obs.keys():
             if key != "NMeas":
-                self.obs[key] /= self.obs["NMeas"]
+                self.obs[key] /= float(self.obs["NMeas"] * self.spins.size)
 
         file_out: str = "ising.out"
         with open(file_out, mode="a") as fout:
