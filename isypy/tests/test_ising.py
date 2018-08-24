@@ -11,7 +11,7 @@ from .. import ising
 class TestStatsObs(unittest.TestCase):
     """ """
 
-    params_file: str = "isypy/tests/params_ising.json"
+    params_file: str = "isypy/tests/params_ising_test.json"
 
     def test_init(self):
         """ """

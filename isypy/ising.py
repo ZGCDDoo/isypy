@@ -162,3 +162,5 @@ class Ising(object):
         file_out: str = "ising.out"
         with open(file_out, mode="a") as fout:
             json.dump(self.obs, fout, indent=4)
+
+        np.savetxt("config.dat", self.spins)
