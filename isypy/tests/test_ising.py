@@ -22,9 +22,9 @@ class TestStatsObs(unittest.TestCase):
         # Test that the given values are ok
         self.assertAlmostEqual(1, ising_c.beta)
         self.assertAlmostEqual(0.001, ising_c.h_field)
-
-        # self.assertEqual(obs.ignore_col, 0)
-        # self.assertEqual(obs.obs_files, obs_files)
+        self.assertAlmostEqual(-1.0, ising_c.Jparams["Jx"])
+        self.assertAlmostEqual(2.101, ising_c.Jparams["Jy"])
+        self.assertAlmostEqual(0.0299, ising_c.Jparams["Jz"])
 
     # def test_check_sanity(self):
     #     """Check if the constructing attributes are sain"""
