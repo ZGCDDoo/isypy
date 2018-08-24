@@ -15,6 +15,8 @@ class TestStatsObs(unittest.TestCase):
 
     def test_init(self):
         """ """
+        print("In test_init")
+
         with open(self.params_file, "r") as fin:
             jj_params = json.load(fin)
         ising_c = ising.Ising(jj_params)
@@ -25,6 +27,32 @@ class TestStatsObs(unittest.TestCase):
         self.assertAlmostEqual(-1.0, ising_c.Jparams["Jx"])
         self.assertAlmostEqual(2.101, ising_c.Jparams["Jy"])
         self.assertAlmostEqual(0.0299, ising_c.Jparams["Jz"])
+        self.assertEqual(4, ising_c.spins.shape[0])
+        self.assertEqual(3, ising_c.spins.shape[1])
+        self.assertEqual(2, ising_c.spins.shape[2])
+        self.assertAlmostEqual(-4.0, ising_c.current["Magnetization"])
+
+        print("Energy = ", ising_c.current["Energy"])
+        print("Magnetization = ", ising_c.current["Magnetization"])
+
+        print("End test_init \n\n\n")
+
+    def test_do_step(self):
+        """ """
+        print("In test_do_step")
+
+        with open(self.params_file, "r") as fin:
+            jj_params = json.load(fin)
+        ising_c = ising.Ising(jj_params)
+
+        for i in range(1000000):
+            ising_c.do_step()
+
+        print("Energy = ", ising_c.current["Energy"])
+        print("DeltaEnergy  = ", ising_c.current["DeltaEnergy"])
+        print(ising_c.spins)
+
+        print("End test_do_step \n\n")
 
     # def test_check_sanity(self):
     #     """Check if the constructing attributes are sain"""

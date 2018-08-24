@@ -47,9 +47,8 @@ class Ising(object):
         # and accept only in the method accept_move
         # DeltaEnergy = E' - E, with E' the energy of the system with the spin flipped
         self.current = {"Spin_Flip": {"Indices": (self.invalid, self.invalid, self.invalid), "DeltaEnergy": self.invalidf, "SpinValue": self.invalid, "Weight": self.invalid},
-                        "Energy": self.invalidf}
+                        "Energy": self.invalidf, "Magnetization": self.magnetization()}
 
-        self.current["Magnetization"] = self.magnetization()
         self.init_energy()
         return None
 
@@ -78,7 +77,7 @@ class Ising(object):
 
     def magnetization(self) ->float:
         """ """
-        return (np.sum(self.spins))
+        return float(np.sum(self.spins))
 
     def do_step(self)->None:
         """Only one  Monte Carlo Step implemented, which here, is a single spin flip
@@ -95,7 +94,7 @@ class Ising(object):
             randint(0, Nx), randint(0, Ny), randint(0, Nz))
 
         (nx, ny, nz) = self.current["Spin_Flip"]["Indices"]
-        self.current["Spin_Flip"]["Value"] = -self.spins[nx, ny, nz]
+        self.current["Spin_Flip"]["SpinValue"] = -self.spins[nx, ny, nz]
 
         delta_energy = -self.current["Energy"]
 
