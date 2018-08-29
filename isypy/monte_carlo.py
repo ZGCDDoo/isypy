@@ -5,17 +5,17 @@ Created on Tue Jan 26 10:03:34 2016
 @author: Charles-David Hebert
 """
 from . import timerpy
-
+import numpy as np
 
 class MonteCarlo(object):
 
     """A Monte Carlo simulation runner
        """
 
-    def __init__(self, jj_params, MarkovChainType) ->None:
+    def __init__(self, yy_params, MarkovChainType) ->None:
         """ Inits a Monte Carlo class.
         Args:
-            jj_params: A json object containing the Monte Carlo configuration for the Simulation.
+            yy_params: A yaml object containing the Monte Carlo configuration for the Simulation.
 
         Returns:
             None
@@ -23,8 +23,12 @@ class MonteCarlo(object):
         Raises:
             IOError:
         """
-        self.jj_params = jj_params
-        self.MarkovChain = MarkovChainType(jj_params)
+        self.MarkovChain = MarkovChainType(yy_params)
+        self.yy_params = yy_params["MonteCarlo"]
+
+        # init the random number of numpy
+        np.random.seed(yy_params["MonteCarlo"]["Seed"])
+
 
         print("Monte Carlo Class created !")
         return None
@@ -43,7 +47,7 @@ class MonteCarlo(object):
         print("Start Thermalization")
 
         timer = timerpy.Timer()
-        timer.start_countdown(60.0 * self.jj_params["ThermalizationTime"])
+        timer.start_countdown(60.0 * self.yy_params["ThermalizationTime"])
 
         while timer.time_over():
             self.MarkovChain.do_step()
@@ -57,10 +61,10 @@ class MonteCarlo(object):
         print("Start Measurements")
 
         timer = timerpy.Timer()
-        timer.start_countdown(60.0 * self.jj_params["MeasurementTime"])
+        timer.start_countdown(60.0 * self.yy_params["MeasurementTime"])
 
         nsteps = 0
-        upd_measure = self.jj_params["UpdatesMeasurement"]
+        upd_measure = self.yy_params["UpdatesMeasurement"]
         while timer.time_over():
             self.MarkovChain.do_step()
             nsteps += 1

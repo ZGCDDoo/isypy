@@ -3,7 +3,7 @@
 
 import numpy as np
 import unittest
-import json
+import yaml
 
 from .. import ising
 
@@ -11,15 +11,15 @@ from .. import ising
 class TestIsing(unittest.TestCase):
     """ """
 
-    params_file: str = "isypy/tests/params_ising_test.json"
+    params_file: str = "isypy/tests/params_ising_test.yml"
 
     def test_init(self):
         """ """
         print("In test_init")
 
         with open(self.params_file, "r") as fin:
-            jj_params = json.load(fin)
-        ising_c = ising.Ising(jj_params)
+            yy_params = yaml.load(fin)
+        ising_c = ising.Ising(yy_params)
 
         # Test that the given values are ok
         self.assertAlmostEqual(1, ising_c.beta)
@@ -42,8 +42,8 @@ class TestIsing(unittest.TestCase):
         print("In test_do_step")
 
         with open(self.params_file, "r") as fin:
-            jj_params = json.load(fin)
-        ising_c = ising.Ising(jj_params)
+            yy_params = yaml.load(fin)
+        ising_c = ising.Ising(yy_params)
 
         for i in range(1000):
             ising_c.do_step()

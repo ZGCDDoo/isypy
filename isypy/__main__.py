@@ -1,15 +1,15 @@
 from isypy import isypy
 import argparse
-import json
+import yaml
 
 
 parser = argparse.ArgumentParser(description='Solve the 2D Ising Model.')
-parser.add_argument('json_file',  type=str,
+parser.add_argument('yaml_file',  type=str,
                     help='name of the params file in json format')
 
 
 args = parser.parse_args()
-with open(args.json_file, "r") as fin:
-    jj_params = json.load(fin)
+with open(args.yaml_file, "r") as fin:
+    yy_params = yaml.load(fin)
 
-isypy.run_isypy(jj_params)
+isypy.run_isypy(yy_params)

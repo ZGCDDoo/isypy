@@ -5,6 +5,7 @@
 
 import numpy as np
 # import mpi4py
+import yaml
 import json
 from numpy.random import randint
 from numpy.random import random as urng
@@ -23,21 +24,24 @@ class Ising(abc_markovchain.ABCMarkovChain):
     invalid = -9999
     invalidf = float(invalid)
 
-    def __init__(self, jj_params)->None:
+    def __init__(self, yy_params)->None:
         """ """
         # 0.) Get the parameter values
-        (Nx, Ny, Nz) = jj_params["LatticeSize"]
 
-        self.beta = float(jj_params["Beta"])
-        np.random.seed(jj_params["Seed"])
+        self.yy_params = yy_params["Model"]
+        (Nx, Ny, Nz) = self.yy_params["LatticeSize"]
+
+        self.beta = float(self.yy_params["Beta"])
 
         # 1.) Randomly initialize the spins
         self.spins = np.random.choice(
             [self.spin_down, self.spin_up], (Nx, Ny, Nz))
 
         # 2.) Calculate the energy and initialize the J matrix
-        self.h_field = jj_params["HField"]
-        self.Jparams = jj_params["JParameters"]
+        self.h_field = self.yy_params["HField"]
+        self.Jparams = self.yy_params["JParameters"]
+        assert len(self.Jparams) ==3 , "Miseria, more than 3 parameters for the J . Stupido !"
+
         self.upd = {"Proposed": 0, "Accepted": 0}
         self.obs = {"Energy": 0.0, "Magnetization": 0.0,
                     "Specific_Heat": 0.0, "Magnetic_susceptibility": 0.0, "NMeas": 0}
@@ -182,5 +186,5 @@ class Ising(abc_markovchain.ABCMarkovChain):
         with open(file_out, mode="a") as fout:
             json.dump(self.obs, fout, indent=4)
 
-        np.savetxt("config.dat", self.spins)
+        np.save("config.npy", self.spins)
         print(self.upd)
