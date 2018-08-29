@@ -3,23 +3,20 @@
 @author: Charles-David Hebert
 """
 
-import time
-import os
-import sys
+import numpy as np
 # import mpi4py
 import json
-
-
-import numpy as np
 from numpy.random import randint
 from numpy.random import random as urng
+
+from . import abc_markovchain
 
 # H = sum_{ij} J_{ij} S_i S_j + h Sum_{i}S_i
 
 # J_ij as the hoppings in Hubbard model CTQMC cttg
 
 
-class Ising(object):
+class Ising(abc_markovchain.ABCMarkovChain):
 
     spin_up = -1
     spin_down = 1
