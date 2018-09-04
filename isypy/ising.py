@@ -4,11 +4,17 @@
 """
 
 import numpy as np
-# import mpi4py
 import yaml
 import json
+import sys
 from numpy.random import randint
 from numpy.random import random as urng
+
+try:
+    from mpi4py import MPI
+except ImportError:
+    print("Ayaya, mpi4py not found. Ok ok, serial mode man !")
+
 
 from . import abc_markovchain
 
@@ -178,13 +184,36 @@ class Ising(abc_markovchain.ABCMarkovChain):
 
     def save(self)->None:
         """Save the state"""
+
         for key in self.obs.keys():
             if key != "NMeas":
                 self.obs[key] /= float(self.obs["NMeas"] * self.spins.size)
 
-        file_out: str = "ising.out"
-        with open(file_out, mode="a") as fout:
-            json.dump(self.obs, fout, indent=4)
+        # gather the measurements dictionaries
 
-        np.save("config.npy", self.spins)
-        print(self.upd)
+        if "mpi4py" in sys.modules:
+            comm = MPI.COMM_WORLD
+            comm_size = comm.Get_size()
+            rank = comm.Get_rank()
+        
+            obs_array = comm.gather(self.obs, root=0)
+            
+            if rank == 0:
+                print("Parallel save !")
+                obs_result = obs_array[0]
+                for ii in range(1, comm_size):                
+                    for key in obs_array[ii].keys():
+                        obs_result[key] += obs_array[ii][key]/float(comm_size)
+
+                file_out: str = "ising.out"
+                with open(file_out, mode="a") as fout:
+                    json.dump(obs_result, fout, indent=4)
+
+                np.save("config.npy", self.spins)
+                # print(self.upd)
+        else:
+            print("Serial Save !")
+            np.save("config.npy", self.spins)
+            file_out: str = "ising.out"
+            with open(file_out, mode="a") as fout:
+                json.dump(self.obs, fout, indent=4)
