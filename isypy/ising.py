@@ -46,7 +46,8 @@ class Ising(abc_markovchain.ABCMarkovChain):
         # 2.) Calculate the energy and initialize the J matrix
         self.h_field = self.yy_params["HField"]
         self.Jparams = self.yy_params["JParameters"]
-        assert len(self.Jparams) ==3 , "Miseria, more than 3 parameters for the J . Stupido !"
+        assert len(
+            self.Jparams) == 3, "Miseria, more than 3 parameters for the J . Stupido !"
 
         self.upd = {"Proposed": 0, "Accepted": 0}
         self.obs = {"Energy": 0.0, "Magnetization": 0.0,
@@ -195,15 +196,18 @@ class Ising(abc_markovchain.ABCMarkovChain):
             comm = MPI.COMM_WORLD
             comm_size = comm.Get_size()
             rank = comm.Get_rank()
-        
+
             obs_array = comm.gather(self.obs, root=0)
-            
+
             if rank == 0:
                 print("Parallel save !")
                 obs_result = obs_array[0]
-                for ii in range(1, comm_size):                
+                for ii in range(1, comm_size):
                     for key in obs_array[ii].keys():
-                        obs_result[key] += obs_array[ii][key]/float(comm_size)
+                        obs_result[key] += obs_array[ii][key]
+
+                for key in obs_result:
+                    obs_result[key] /= float(comm_size)
 
                 file_out: str = "ising.out"
                 with open(file_out, mode="a") as fout:
