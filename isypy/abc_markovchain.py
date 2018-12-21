@@ -15,7 +15,6 @@ class ABCMarkovChain(abc.ABC):
         """ """
         return None
 
-
     @abc.abstractmethod
     def build_arr_perdiodic(self, NN: int):
         """Build numpy arrays that can be used with periodic boundary conditions"""
@@ -34,5 +33,3 @@ class ABCMarkovChain(abc.ABC):
     def save(self)->None:
         """Save the state."""
         return None
-
-

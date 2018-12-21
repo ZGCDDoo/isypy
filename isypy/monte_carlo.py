@@ -12,7 +12,8 @@ import sys
 try:
     from mpi4py import MPI
 except ImportError:
-    print("Could not import mpi4py, running in serial mode. Consider running withou mpirun. Stupido !")
+    print("Could not import mpi4py, running in serial mode. Consider running without mpirun. Stupido !")
+
 
 class MonteCarlo(object):
 
@@ -38,7 +39,6 @@ class MonteCarlo(object):
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
             np.random.seed(yy_params["MonteCarlo"]["Seed"] + 1277*rank)
-
 
         tools.println("Monte Carlo Class created !")
         return None
