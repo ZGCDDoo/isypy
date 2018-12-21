@@ -1,8 +1,8 @@
 --- # Monte Carlo configuration
 
 MonteCarlo:
-  ThermalizationTime:       0.1
-  MeasurementTime:          1.0
+  ThermalizationTime:       0.01
+  MeasurementTime:          0.010
   UpdatesMeasurement:       100
   Seed:                     103234
   
