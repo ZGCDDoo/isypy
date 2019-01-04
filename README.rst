@@ -22,4 +22,7 @@ Installation
 Running tests and examples
 ---------------------------
 1. $ cd isypy && python -m unittest discover
-2. $ cd isypy/isypy/tests && python -m isypy params_ising.json
+2. $ cd isypy/isypy/tests && python -m isypy params_ising.yml
+
+To run your own simulation simply copy the file params_ising.yml from step 2
+and change the self-explanatory parameters to your likeing.
