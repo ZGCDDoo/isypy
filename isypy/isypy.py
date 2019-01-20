@@ -9,6 +9,16 @@ from . import tools
 
 
 def run_isypy(jj_params) -> None:
+    """
+
+    Parameters
+    ----------
+    jj_params
+
+    Returns
+    -------
+
+    """
     tools.println("Start Running isypy !")
 
     mc_machine = monte_carlo.MonteCarlo(jj_params, ising.Ising)

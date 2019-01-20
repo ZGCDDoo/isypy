@@ -11,7 +11,7 @@ class ABCMarkovChain(abc.ABC):
         return None
 
     @abc.abstractmethod
-    def init_energy(self)->None:
+    def init_energy(self) -> None:
         """ """
         return None
 
@@ -21,15 +21,15 @@ class ABCMarkovChain(abc.ABC):
         return None
 
     @abc.abstractmethod
-    def do_step(self)->None:
+    def do_step(self) -> None:
         """Perform one monte carlo update."""
         return None
 
     @abc.abstractmethod
-    def measure(self)->None:
+    def measure(self) -> None:
         """Perform one measurement for the current configuaration. """
         return None
 
-    def save(self)->None:
+    def save(self) -> None:
         """Save the state."""
         return None

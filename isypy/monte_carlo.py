@@ -12,15 +12,17 @@ import sys
 try:
     from mpi4py import MPI
 except ImportError:
-    print("Could not import mpi4py, running in serial mode. Consider running without mpirun. Stupido !")
+    print(
+        "Could not import mpi4py, running in serial mode. Consider running without mpirun. Stupido !"
+    )
 
 
-class MonteCarlo(object):
+class MonteCarlo:
 
     """A Monte Carlo simulation runner
        """
 
-    def __init__(self, yy_params, MarkovChainType) ->None:
+    def __init__(self, yy_params, MarkovChainType) -> None:
         """ Inits a Monte Carlo class.
         Args:
             yy_params: A yaml object containing the Monte Carlo configuration for the Simulation.
@@ -31,19 +33,21 @@ class MonteCarlo(object):
         Raises:
             IOError:
         """
-        self.MarkovChain = MarkovChainType(yy_params)
-        self.yy_params = yy_params["MonteCarlo"]
 
-        # init the random number of numpy
+        # init the seed
         if "mpi4py" in sys.modules:
             comm = MPI.COMM_WORLD
             rank = comm.Get_rank()
-            np.random.seed(yy_params["MonteCarlo"]["Seed"] + 1277*rank)
+            yy_params["MonteCarlo"]["Seed"] = (
+                yy_params["MonteCarlo"]["Seed"] + 1277 * rank
+            )
+
+        self.MarkovChain = MarkovChainType(yy_params)
+        self.yy_params = yy_params["MonteCarlo"]
 
         tools.println("Monte Carlo Class created !")
-        return None
 
-    def run_simulation(self)->None:
+    def run_simulation(self) -> None:
         """ """
         tools.println("Start of Run Simulation")
         self.thermalize()
@@ -52,7 +56,7 @@ class MonteCarlo(object):
         tools.println("End of Run Simulation")
         return None
 
-    def thermalize(self) ->None:
+    def thermalize(self) -> None:
         """ """
         tools.println("Start Thermalization")
 
@@ -66,7 +70,7 @@ class MonteCarlo(object):
 
         return None
 
-    def measure(self)->None:
+    def measure(self) -> None:
         """ """
         tools.println("Start Measurements")
 

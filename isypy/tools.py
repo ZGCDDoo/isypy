@@ -10,7 +10,7 @@ except ImportError:
     pass
 
 
-def println(message: str)->None:
+def println(message: str) -> None:
     """Print with or without mpi. """
 
     if "mpi4py" in sys.modules:
