@@ -23,15 +23,14 @@ class MonteCarlo:
        """
 
     def __init__(self, yy_params, MarkovChainType) -> None:
-        """ Inits a Monte Carlo class.
-        Args:
-            yy_params: A yaml object containing the Monte Carlo configuration for the Simulation.
+        """
 
-        Returns:
-            None
-
-        Raises:
-            IOError:
+        Parameters
+        ----------
+        yy_params: yaml
+            parameter file in yaml-object format
+        MarkovChainType:
+            The class that implements the interface given by abc_markovchain.
         """
 
         # init the seed
@@ -54,7 +53,6 @@ class MonteCarlo:
         self.measure()
         self.MarkovChain.save()
         tools.println("End of Run Simulation")
-        return None
 
     def thermalize(self) -> None:
         """ """
@@ -68,8 +66,6 @@ class MonteCarlo:
 
         tools.println("End Thermalization")
 
-        return None
-
     def measure(self) -> None:
         """ """
         tools.println("Start Measurements")
@@ -77,15 +73,13 @@ class MonteCarlo:
         timer = timerpy.Timer()
         timer.start_countdown(60.0 * self.yy_params["MeasurementTime"])
 
-        nsteps = 0
+        nsteps: int = 0
         upd_measure = self.yy_params["UpdatesMeasurement"]
-        while timer.time_over():
-            self.MarkovChain.do_step()
-            nsteps += 1
-            # print("nsteps = ", nsteps)
-            if (nsteps % upd_measure) == 0:
-                self.MarkovChain.measure()
+        while not timer.time_over():
+            for ii in range(upd_measure):
+                self.MarkovChain.do_step()
+                nsteps += 1
+
+            self.MarkovChain.measure()
 
         tools.println("End Measurements")
-
-        return None

@@ -8,12 +8,13 @@ from . import ising
 from . import tools
 
 
-def run_isypy(jj_params) -> None:
+def run_isypy(yy_params) -> None:
     """
 
     Parameters
     ----------
-    jj_params
+    yy_params: yaml
+        The parameters in yaml format
 
     Returns
     -------
@@ -21,6 +22,5 @@ def run_isypy(jj_params) -> None:
     """
     tools.println("Start Running isypy !")
 
-    mc_machine = monte_carlo.MonteCarlo(jj_params, ising.Ising)
+    mc_machine = monte_carlo.MonteCarlo(yy_params, ising.Ising)
     mc_machine.run_simulation()
-    return None
