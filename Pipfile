@@ -8,7 +8,7 @@ verify_ssl = true
 [packages]
 scipy = "*"
 mpi4py = "*"
-pyyaml = "*"
+pyyaml = ">=4.2b1"
 
 [requires]
 python_version = "3.7"
