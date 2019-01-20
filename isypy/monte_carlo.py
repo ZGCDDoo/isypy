@@ -40,6 +40,7 @@ class MonteCarlo:
             yy_params["MonteCarlo"]["Seed"] = (
                 yy_params["MonteCarlo"]["Seed"] + 1277 * rank
             )
+            tools.println(f"Parallel mode, NWorkers = {comm.Get_size()}")
 
         self.MarkovChain = MarkovChainType(yy_params)
         self.yy_params = yy_params["MonteCarlo"]

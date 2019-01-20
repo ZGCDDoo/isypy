@@ -46,12 +46,6 @@ class TestIsing(unittest.TestCase):
         for i in range(num_steps):
             ising_c.do_step()
 
-        # self.assertAlmostEqual(0.9999, ising_c.current["Magnetization"], places=4)
-
-    @unittest.skip("Not yet implemented.")
-    def test_integration(self):
-        pass
-
 
 if __name__ == "__main__":
     unittest.main()
