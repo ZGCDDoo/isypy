@@ -40,24 +40,24 @@ class MonteCarlo:
             yy_params["MonteCarlo"]["Seed"] = (
                 yy_params["MonteCarlo"]["Seed"] + 1277 * rank
             )
-            tools.println(f"Parallel mode, NWorkers = {comm.Get_size()}")
+            tools.log_info(f"Parallel mode, NWorkers = {comm.Get_size()}")
 
         self.MarkovChain = MarkovChainType(yy_params)
         self.yy_params = yy_params["MonteCarlo"]
 
-        tools.println("Monte Carlo Class created !")
+        tools.log_debug("Monte Carlo Class created !")
 
     def run_simulation(self) -> None:
         """ """
-        tools.println("Start of Run Simulation")
+        tools.log_info("Start of Run Simulation")
         self.thermalize()
         self.measure()
         self.MarkovChain.save()
-        tools.println("End of Run Simulation")
+        tools.log_info("End of Run Simulation")
 
     def thermalize(self) -> None:
         """ """
-        tools.println("Start Thermalization")
+        tools.log_info("Start Thermalization")
 
         timer = timerpy.Timer()
         timer.start_countdown(60.0 * self.yy_params["ThermalizationTime"])
@@ -65,11 +65,11 @@ class MonteCarlo:
         while timer.time_over():
             self.MarkovChain.do_step()
 
-        tools.println("End Thermalization")
+        tools.log_info("End Thermalization")
 
     def measure(self) -> None:
         """ """
-        tools.println("Start Measurements")
+        tools.log_info("Start Measurements")
 
         timer = timerpy.Timer()
         timer.start_countdown(60.0 * self.yy_params["MeasurementTime"])
@@ -83,4 +83,4 @@ class MonteCarlo:
 
             self.MarkovChain.measure()
 
-        tools.println("End Measurements")
+        tools.log_info("End Measurements")

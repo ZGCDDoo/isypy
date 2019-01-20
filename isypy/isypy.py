@@ -2,6 +2,7 @@
 """
 @author: Charles-David Hebert
 """
+import logging
 
 from . import monte_carlo
 from . import ising
@@ -20,7 +21,14 @@ def run_isypy(yy_params) -> None:
     -------
 
     """
-    tools.println("Start Running isypy !")
+
+    logging.basicConfig(
+        format="%(asctime)s: %(message)s",
+        datefmt="%m/%d/%Y %I:%M:%S %p",
+        level=logging.DEBUG,
+    )
+
+    tools.log_info("Start Running isypy !")
 
     mc_machine = monte_carlo.MonteCarlo(yy_params, ising.Ising)
     mc_machine.run_simulation()
