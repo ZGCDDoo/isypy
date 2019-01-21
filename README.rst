@@ -4,6 +4,10 @@
 .. image:: https://codecov.io/gh/ZGCDDoo/isypy/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/ZGCDDoo/isypy
 
+.. image:: https://readthedocs.org/projects/isypy/badge/?version=latest
+  :target: https://isypy.readthedocs.io/en/latest/?badge=latest
+  :alt: Documentation Status
+
 Isypy
 =======
 
