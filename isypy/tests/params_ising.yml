@@ -1,17 +1,17 @@
---- # Monte Carlo configuration
+---
+# Monte Carlo configuration
 
 MonteCarlo:
-  ThermalizationTime:       0.5
-  MeasurementTime:          1.0
-  UpdatesMeasurement:       20
-  Seed:                     103234
-  
+  ThermalizationTime: 0.01
+  MeasurementTime: 0.010
+  UpdatesMeasurement: 100
+  Seed: 103234
+
 Model:
-  LatticeSize:              [16, 16, 1]   
-  Beta:                     0.50  
-  HField:                   1.1
+  LatticeSize: [32, 32, 1]
+  Beta: 1.0
+  HField: 0.001
   JParameters:
     Jx: -1.0
-    Jy: -1.0
-    Jz: 0.0  
-    
+    Jy: 2.101
+    Jz: 0.0299
