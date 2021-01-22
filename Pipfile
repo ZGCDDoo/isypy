@@ -9,4 +9,6 @@ verify_ssl = true
 scipy = "*"
 mpi4py = "*"
 pyyaml = "*"
+pylint = "*"
+flake8 = "*"
 
