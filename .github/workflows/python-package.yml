@@ -28,14 +28,17 @@ jobs:
         sudo apt install libboost-all-dev
         python -m pip install --upgrade pip
         python -m pip install flake8 pipenv pylint
-    - name: Lint with flake8
+    - name: Lint with flake8 and pylint for errors
       run: |
         # check Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-    - name: Lint with pylint
-      run: |
-        pylint --disable=R,C --extension-pkg-whitelist=mpi4py isypy/
+        # Check pylint errors
+        pylint -E isypy/
     - name: Test 
       run: |
         pipenv install
         pipenv run python -m unittest discover
+    - name: Lint with pylint for warnings
+      run: |
+        pylint --disable=R,C --extension-pkg-whitelist=mpi4py isypy/
+
