@@ -25,20 +25,19 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo apt install libboost-all-dev
-        python -m pip install --upgrade pip
-        python -m pip install flake8 pipenv pylint
+        sudo apt install libboost-all-dev pipenv
+        pipenv install
     - name: Lint with flake8 and pylint for errors
       run: |
         # check Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        pipenv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # Check pylint errors
-        pylint -E isypy/
+        pipenv run pylint -E isypy/
     - name: Test 
       run: |
         pipenv install
         pipenv run python -m unittest discover
     - name: Lint with pylint for warnings
       run: |
-        pylint --disable=R,C --extension-pkg-whitelist=mpi4py isypy/
+        pipenv run pylint --disable=R,C --extension-pkg-whitelist=mpi4py isypy/
 
