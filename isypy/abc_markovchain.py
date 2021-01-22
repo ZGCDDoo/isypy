@@ -1,5 +1,3 @@
-import numpy as np  # type: ignore
-from typing import Tuple
 import abc
 
 

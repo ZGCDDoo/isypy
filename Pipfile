@@ -11,4 +11,3 @@ mpi4py = "*"
 pyyaml = "*"
 pylint = "*"
 flake8 = "*"
-

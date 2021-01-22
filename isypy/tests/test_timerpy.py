@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-import numpy as np
 import unittest
-import json
-
 from .. import timerpy
 
 
@@ -15,7 +12,7 @@ class TestTimerPy(unittest.TestCase):
 
     def test_init(self):
         """ """
-        timer = timerpy.Timer()
+        _ = timerpy.Timer()
 
 
 if __name__ == "__main__":

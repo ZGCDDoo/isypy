@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-import numpy as np
 import unittest
 import yaml
 
@@ -43,7 +42,7 @@ class TestIsing(unittest.TestCase):
         ising_c = ising.Ising(yy_params)
 
         num_steps = int(1e6)
-        for i in range(num_steps):
+        for _ in range(num_steps):
             ising_c.do_step()
 
 

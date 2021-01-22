@@ -6,7 +6,6 @@ Created on Tue Jan 26 10:03:34 2016
 """
 from . import timerpy
 from . import tools
-import numpy as np
 import sys
 
 try:
@@ -77,7 +76,7 @@ class MonteCarlo:
         nsteps: int = 0
         upd_measure = self.yy_params["UpdatesMeasurement"]
         while not timer.time_over():
-            for ii in range(upd_measure):
+            for _ in range(upd_measure):
                 self.MarkovChain.do_step()
                 nsteps += 1
 

@@ -4,7 +4,6 @@
 """
 
 import numpy as np
-import yaml
 import json
 import sys
 from numpy.random import randint
@@ -32,6 +31,8 @@ class Ising(abc_markovchain.ABCMarkovChain):
 
     def __init__(self, yy_params) -> None:
         """ """
+
+        super().__init__()
         # 0.) Get the parameter values and set the rng
         np.random.seed(yy_params["MonteCarlo"]["Seed"])
 

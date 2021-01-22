@@ -25,7 +25,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        sudo apt install libboost-all-dev pipenv
+        sudo apt install libboost-all-dev pipenv black
         pipenv install
     - name: Lint with flake8 and pylint for errors
       run: |
