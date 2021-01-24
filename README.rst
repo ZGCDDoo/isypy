@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.org/ZGCDDoo/Isypy.svg?branch=master
     :target: https://travis-ci.org/ZGCDDoo/Isypy
-   
+
+.. image:: https://github.com/ZGCDDoo/isypy/workflows/Python%20package/badge.svg?branch=master
+    :target: https://github.com/ZGCDDoo/isypy
+
 .. image:: https://codecov.io/gh/ZGCDDoo/isypy/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/ZGCDDoo/isypy
 
